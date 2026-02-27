@@ -45,6 +45,7 @@ function updateStatus(message) {
 }
 
 function processExitData() {
+    console.log(exitData);
     if (!exitData.length) return;
 
     const totalExits = exitData.length;
@@ -132,3 +133,4 @@ function renderReasonChart(data) {
         }
     });
 }
+

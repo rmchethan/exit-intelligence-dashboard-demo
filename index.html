@@ -2,36 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Exit Intelligence Tool (Demo)</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Exit Intelligence Dashboard (Demo)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <h1>Exit Intelligence Dashboard (Demo)</h1>
+    <!-- HEADER -->
+    <header class="header">
+        <h1>Exit Intelligence Dashboard</h1>
+        <span class="badge">Demo Model</span>
+    </header>
 
-    <section class="upload-section">
-        <h2>Upload Files</h2>
+    <!-- UPLOAD SECTION -->
+    <section class="card upload-card">
+        <h2>Upload Data</h2>
 
-        <div>
-            <label>Exit File (Required):</label>
+        <div class="upload-group">
+            <label>Exit File (Required)</label>
             <input type="file" id="exitFile" accept=".csv">
         </div>
 
-        <div>
-            <label>Headcount File (Optional):</label>
+        <div class="upload-group">
+            <label>Headcount File (Optional)</label>
             <input type="file" id="headcountFile" accept=".csv">
         </div>
 
         <button id="processBtn">Process Data</button>
+
+        <div id="statusOutput" class="status-box">
+            No files processed yet.
+        </div>
     </section>
 
-    <section id="statusSection">
-        <h2>Status</h2>
-        <div id="statusOutput">No files processed yet.</div>
+    <!-- EXECUTIVE SNAPSHOT -->
+    <section class="kpi-grid">
+        <div class="kpi-card">
+            <h3>Total Exits</h3>
+            <p id="kpiTotalExits">--</p>
+        </div>
+
+        <div class="kpi-card">
+            <h3>Voluntary %</h3>
+            <p id="kpiVoluntary">--</p>
+        </div>
+
+        <div class="kpi-card">
+            <h3>Avg Tenure</h3>
+            <p id="kpiTenure">--</p>
+        </div>
+
+        <div class="kpi-card">
+            <h3>Highest Attrition Dept</h3>
+            <p id="kpiDept">--</p>
+        </div>
+
+        <div class="kpi-card">
+            <h3>Top Exit Reason</h3>
+            <p id="kpiReason">--</p>
+        </div>
+
+        <div class="kpi-card">
+            <h3>High Performer Loss %</h3>
+            <p id="kpiPerformance">--</p>
+        </div>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-    <script src="script.js"></script>
+    <!-- CHART SECTION -->
+    <section class="chart-section">
+        <div class="card">
+            <h2>Attrition Trend (Quarterly)</h2>
+            <canvas id="trendChart"></canvas>
+        </div>
+
+        <div class="card">
+            <h2>Exit Reason Distribution</h2>
+            <canvas id="reasonChart"></canvas>
+        </div>
+    </section>
+
+    <!-- INSIGHTS -->
+    <section class="card">
+        <h2>Insights</h2>
+        <div id="insightsContainer">
+            <p>No insights generated yet.</p>
+        </div>
+    </section>
+
+    <script src="js/script.js"></script>
 
 </body>
 </html>

@@ -59,6 +59,10 @@ function processExitData() {
     const avgTenure = calculateAverageTenure(exitData);
 
     const topReason = getTopExitReason(exitData);
+    
+    const highest = getHighestReason(exitData);
+    document.getElementById("highestReason").innerText =
+    `${highest.reason} (${highest.count})`;
 
     // Update KPI cards
     document.getElementById("kpiTotalExits").innerText = totalExits;
@@ -198,5 +202,28 @@ function renderTrendChart(data) {
     });
 }
 
+function getHighestReason(data) {
+    const reasonCounts = {};
+
+    data.forEach(record => {
+        const reason = record["Exit Reason Category"] || "Unknown";
+        reasonCounts[reason] = (reasonCounts[reason] || 0) + 1;
+    });
+
+    let highestReason = null;
+    let highestCount = 0;
+
+    for (let reason in reasonCounts) {
+        if (reasonCounts[reason] > highestCount) {
+            highestCount = reasonCounts[reason];
+            highestReason = reason;
+        }
+    }
+
+    return {
+        reason: highestReason,
+        count: highestCount
+    };
+}
 
 

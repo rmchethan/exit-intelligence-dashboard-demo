@@ -46,6 +46,8 @@ function processExitData() {
     const avgTenure = calculateAverageTenure(exitData);
     const topReason = getTopExitReason(exitData);
     const highestDept = getHighestAttritionDept(exitData);
+    const highPerfLoss = calculateHighPerformerLoss(exitData);
+
 
     // Update KPI cards
     document.getElementById("kpiTotalExits").innerText = totalExits;
@@ -53,7 +55,8 @@ function processExitData() {
     document.getElementById("kpiTenure").innerText = avgTenure + " months";
     document.getElementById("kpiReason").innerText = topReason;
     document.getElementById("kpiHighestDept").innerText = highestDept;
-
+    document.getElementById("kpiHighPerf").innerText = highPerfLoss;
+    
     // Update insight panel
     document.getElementById("highestReason").innerText = `${getHighestReason(exitData).reason} (${getHighestReason(exitData).count})`;
     document.getElementById("insightPanel").innerText = generateInsights(exitData);
@@ -385,6 +388,7 @@ document.getElementById("processBtn").addEventListener("click", function () {
 
 document.getElementById("genderFilter").addEventListener("change", applyFilters);
 document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
 
 
 

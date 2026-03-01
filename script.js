@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // Update KPI cards
-    document.getElementById("kpiTotalExits").innerText = totalExits;
+   
     document.getElementById("kpiVoluntary").innerText = voluntaryPercent + "%";
     document.getElementById("kpiTenure").innerText = avgTenure + " months";
     document.getElementById("kpiReason").innerText = topReason;
@@ -330,6 +330,7 @@ document.getElementById("processBtn").addEventListener("click", function () {
 
 document.getElementById("genderFilter").addEventListener("change", applyFilters);
 document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
 
 
 

@@ -86,8 +86,15 @@ button:hover {
     margin-bottom: 30px;
 }
 
+#departmentChart {
+    max-width: 600px;
+    max-height: 300px;
+    margin: auto;
+}
+
 @media (max-width: 900px) {
     .chart-section {
         grid-template-columns: 1fr;
     }
 }
+

@@ -63,6 +63,7 @@ function processExitData() {
     const highest = getHighestReason(exitData);
     document.getElementById("highestReason").innerText =
     `${highest.reason} (${highest.count})`;
+    
 
     // Update KPI cards
     document.getElementById("kpiTotalExits").innerText = totalExits;
@@ -72,6 +73,7 @@ function processExitData() {
 
     renderReasonChart(exitData);
     renderTrendChart(exitData);
+    renderDepartmentChart(exitData);
 }
 
 function calculateAverageTenure(data) {
@@ -256,6 +258,37 @@ function renderDepartmentChart(data) {
         }
     });
 }
+
+//Insight Panel (Rule-Based Intelligence)
+
+function generateInsights(data) {
+    const total = data.length;
+    const voluntary = data.filter(d => d["Voluntary/Involuntary"] === "Voluntary").length;
+    const involuntary = total - voluntary;
+
+    const voluntaryRate = ((voluntary / total) * 100).toFixed(1);
+
+    let insightText = "";
+
+    if (voluntaryRate > 70) {
+        insightText += "⚠ High voluntary attrition detected. Review engagement and retention strategies.\n\n";
+    }
+
+    const highest = getHighestReason(data);
+
+    if (highest.reason === "Compensation") {
+        insightText += "💰 Compensation is leading exit driver. Benchmark salary competitiveness.\n\n";
+    }
+
+    if (highest.reason === "Manager Issues") {
+        insightText += "👥 Leadership risk indicator. Consider manager capability review.\n\n";
+    }
+
+    return insightText || "No major risk patterns detected.";
+}
+
+
+
 
 
 

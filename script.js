@@ -67,6 +67,7 @@ function processExitData() {
     document.getElementById("kpiReason").innerText = topReason;
 
     renderReasonChart(exitData);
+    renderTrendChart(exitData);
 }
 
 function calculateAverageTenure(data) {
@@ -133,4 +134,53 @@ function renderReasonChart(data) {
         }
     });
 }
+
+function getQuarter(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date)) return null;
+
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    const quarter = Math.floor(month / 3) + 1;
+
+    return `Q${quarter} ${year}`;
+}
+
+function calculateQuarterlyTrend(data) {
+    const trend = {};
+
+    data.forEach(record => {
+        const quarter = getQuarter(record["Exit Date"]);
+        if (!quarter) return;
+
+        trend[quarter] = (trend[quarter] || 0) + 1;
+    });
+
+    return trend;
+}
+
+function renderTrendChart(data) {
+    const trendData = calculateQuarterlyTrend(data);
+
+    const labels = Object.keys(trendData).sort();
+    const values = labels.map(label => trendData[label]);
+
+    if (trendChart) trendChart.destroy();
+
+    const ctx = document.getElementById("trendChart").getContext("2d");
+
+    trendChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Exits per Quarter",
+                data: values,
+                fill: false,
+                tension: 0.2
+            }]
+        }
+    });
+}
+
 

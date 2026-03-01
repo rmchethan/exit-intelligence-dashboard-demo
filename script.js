@@ -70,9 +70,9 @@ function processExitData() {
     //Populate Branch Dynamically
     populateBranchFilter(exitData);
     
-    renderReasonChart(filtered);
-    renderTrendChart(filtered);
-    renderDepartmentChart(filtered);
+    renderReasonChart(exitData);
+    renderTrendChart(exitData);
+    renderDepartmentChart(exitData);
 
     document.getElementById("insightPanel").innerText =
         generateInsights(filtered);
@@ -343,6 +343,7 @@ function populateBranchFilter(data) {
         branchSelect.appendChild(option);
     });
 }
+
 
 
 

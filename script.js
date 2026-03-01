@@ -83,16 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-    // Update KPI cards
-   
-    document.getElementById("kpiVoluntary").innerText = voluntaryPercent + "%";
-    document.getElementById("kpiTenure").innerText = avgTenure + " months";
-    document.getElementById("kpiReason").innerText = topReason;
-
-    renderReasonChart(exitData);
-    renderTrendChart(exitData);
-    renderDepartmentChart(exitData);
-
+  
 
 function calculateAverageTenure(data) {
     let totalMonths = 0;
@@ -330,6 +321,7 @@ document.getElementById("processBtn").addEventListener("click", function () {
 
 document.getElementById("genderFilter").addEventListener("change", applyFilters);
 document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
 
 
 

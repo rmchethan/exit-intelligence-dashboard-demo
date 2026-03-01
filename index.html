@@ -86,22 +86,31 @@
     </select>
 
     <!-- CHART SECTION -->
-    <section class="chart-section">
-        <div class="card">
-            <h2>Attrition Trend (Quarterly)</h2>
-            <canvas id="trendChart"></canvas>
-        </div>
+    <section class="dashboard-grid">
 
-        <div class="card">
-            <h2>Exit Reason Distribution</h2>
-            <canvas id="reasonChart"></canvas>
-        </div>
+    <!-- LEFT SIDE -->
+    <div class="chart-card">
+        <h3>Exit Reason Distribution</h3>
+        <canvas id="reasonChart"></canvas>
+    </div>
 
-        <div style="width: 80%; max-width: 800px; height: 400px; margin: auto;">
+    <div class="chart-card">
+        <h3>Quarterly Exit Trend</h3>
+        <canvas id="trendChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h3>Department Breakdown</h3>
         <canvas id="departmentChart"></canvas>
-        </div>
-        
-    </section>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="insight-card">
+        <h3>Strategic Insights</h3>
+        <p id="insightPanel"></p>
+    </div>
+
+</section>
 
     <!-- INSIGHTS -->
     <section class="card">
@@ -111,14 +120,12 @@
         </section>
 
     
-
-    <h2>Department Breakdown</h2>
-    <canvas id="departmentChart"></canvas>
-    
+  
      <script src="script.js"></script>
 </body>
     
 </html>
+
 
 
 

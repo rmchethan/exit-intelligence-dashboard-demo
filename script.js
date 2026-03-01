@@ -64,6 +64,9 @@ function processExitData() {
     document.getElementById("highestReason").innerText =
     `${highest.reason} (${highest.count})`;
     
+    document.getElementById("insightPanel").innerText =
+    generateInsights(exitData);
+    
 
     // Update KPI cards
     document.getElementById("kpiTotalExits").innerText = totalExits;
@@ -286,6 +289,7 @@ function generateInsights(data) {
 
     return insightText || "No major risk patterns detected.";
 }
+
 
 
 

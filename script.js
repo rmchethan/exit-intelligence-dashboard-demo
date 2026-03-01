@@ -42,32 +42,34 @@ function processExitData() {
     const voluntaryCount = exitData.filter(e =>
         e["Voluntary/Involuntary"]?.toLowerCase() === "voluntary"
     ).length;
-
     const voluntaryPercent = ((voluntaryCount / totalExits) * 100).toFixed(1);
     const avgTenure = calculateAverageTenure(exitData);
-    const highest = getHighestReason(exitData);
+    const topReason = getTopExitReason(exitData);
+    const highestDept = getHighestAttritionDept(exitData);
 
-    document.getElementById("highestReason").innerText =
-        `${highest.reason} (${highest.count})`;
-
-    document.getElementById("insightPanel").innerText =
-        generateInsights(exitData);
-
+    // Update KPI cards
     document.getElementById("kpiTotalExits").innerText = totalExits;
     document.getElementById("kpiVoluntary").innerText = voluntaryPercent + "%";
     document.getElementById("kpiTenure").innerText = avgTenure + " months";
-    document.getElementById("kpiHighestDept").innerText = getHighestAttritionDept(exitData);
-    document.getElementById("kpiHighPerf").innerText = getHighPerformerLossPercent(exitData);
+    document.getElementById("kpiReason").innerText = topReason;
+    document.getElementById("kpiHighestDept").innerText = highestDept;
+
+    // Update insight panel
+    document.getElementById("highestReason").innerText = `${getHighestReason(exitData).reason} (${getHighestReason(exitData).count})`;
+    document.getElementById("insightPanel").innerText = generateInsights(exitData);
+
+    // Populate filters
     populateBranchFilter(exitData);
 
-    // Use exitData here, never filtered
+    // Render all charts for the full dataset by default
     renderReasonChart(exitData);
     renderTrendChart(exitData);
     renderDepartmentChart(exitData);
 }
 
 
-    function applyFilters() {
+
+function applyFilters() {
     const gender = document.getElementById("genderFilter").value;
     const branch = document.getElementById("branchFilter").value;
 
@@ -76,12 +78,11 @@ function processExitData() {
     if (gender !== "All") filtered = filtered.filter(d => d["Gender"] === gender);
     if (branch !== "All") filtered = filtered.filter(d => d["Branch"] === branch);
 
+    // Update charts and insights for filtered data
     renderReasonChart(filtered);
     renderTrendChart(filtered);
     renderDepartmentChart(filtered);
-
-    document.getElementById("insightPanel").innerText =
-        generateInsights(filtered);
+    document.getElementById("insightPanel").innerText = generateInsights(filtered);
 }
 
 
@@ -369,6 +370,7 @@ document.getElementById("processBtn").addEventListener("click", function () {
 
 document.getElementById("genderFilter").addEventListener("change", applyFilters);
 document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
 
 
 

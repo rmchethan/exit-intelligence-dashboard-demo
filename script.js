@@ -157,6 +157,21 @@ function getTopExitReason(data) {
     return topReason;
 }
 
+function calculateHighPerformerLoss(data) {
+    if (!data.length) return "--";
+
+    const highPerformers = data.filter(d =>
+        d["Performance Rating"]?.toLowerCase().includes("high") ||
+        d["Performance Rating"] === "1+" ||
+        d["Performance Rating"] === "1"
+    );
+
+    const percent = ((highPerformers.length / data.length) * 100).toFixed(1);
+
+    return percent + "%";
+}
+
+
 function renderReasonChart(data) {
     const reasonCounts = {};
 
@@ -370,6 +385,7 @@ document.getElementById("processBtn").addEventListener("click", function () {
 
 document.getElementById("genderFilter").addEventListener("change", applyFilters);
 document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
 
 
 

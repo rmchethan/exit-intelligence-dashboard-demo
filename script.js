@@ -102,8 +102,10 @@ function processExitData() {
         generateInsights(filtered);
 }
 
-document.getElementById("genderFilter").addEventListener("change", applyFilters);
-document.getElementById("branchFilter").addEventListener("change", applyFilters);
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("genderFilter").addEventListener("change", applyFilters);
+    document.getElementById("branchFilter").addEventListener("change", applyFilters);
+});
 
 
     // Update KPI cards
@@ -341,6 +343,7 @@ function populateBranchFilter(data) {
         branchSelect.appendChild(option);
     });
 }
+
 
 
 

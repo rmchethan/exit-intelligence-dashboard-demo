@@ -28,6 +28,13 @@ function updateStatus(message) {
     document.getElementById("statusOutput").innerText = message;
 }
 
+function getHighPerformerLossPercent(data) {
+    const highPerf = data.filter(d => parseFloat(d["Current Performance Rating"]) >= 4);
+    return data.length ? ((highPerf.length / data.length) * 100).toFixed(1) + "%" : "--";
+}
+
+
+
 function processExitData() {
     if (!exitData.length) return;
 
@@ -49,7 +56,8 @@ function processExitData() {
     document.getElementById("kpiTotalExits").innerText = totalExits;
     document.getElementById("kpiVoluntary").innerText = voluntaryPercent + "%";
     document.getElementById("kpiTenure").innerText = avgTenure + " months";
-
+    document.getElementById("kpiHighestDept").innerText = getHighestAttritionDept(exitData);
+    document.getElementById("kpiHighPerf").innerText = getHighPerformerLossPercent(exitData);
     populateBranchFilter(exitData);
 
     // Use exitData here, never filtered
@@ -80,6 +88,8 @@ function processExitData() {
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("genderFilter").addEventListener("change", applyFilters);
     document.getElementById("branchFilter").addEventListener("change", applyFilters);
+    const topReason = getTopExitReason(exitData);
+    document.getElementById("kpiReason").innerText = topReason;
 });
 
 
@@ -102,6 +112,28 @@ function calculateAverageTenure(data) {
 
     return count ? (totalMonths / count).toFixed(1) : "--";
 }
+
+function getHighestAttritionDept(data) {
+    const deptCounts = {};
+    data.forEach(d => {
+        const dept = d["Department"] || "Unknown";
+        deptCounts[dept] = (deptCounts[dept] || 0) + 1;
+    });
+
+    let highestDept = "--";
+    let max = 0;
+
+    for (let dept in deptCounts) {
+        if (deptCounts[dept] > max) {
+            max = deptCounts[dept];
+            highestDept = dept;
+        }
+    }
+
+    return highestDept;
+}
+
+
 
 function getTopExitReason(data) {
     const reasonCounts = {};
@@ -321,6 +353,7 @@ document.getElementById("processBtn").addEventListener("click", function () {
 
 document.getElementById("genderFilter").addEventListener("change", applyFilters);
 document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
 
 
 

@@ -288,15 +288,7 @@ function renderDepartmentChart(data) {
 
     const ctx = document.getElementById("departmentChart").getContext("2d");
 
-    options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-        legend: { display: false }
-    }
-}
-
-    departmentChart = new Chart(ctx, {
+     departmentChart = new Chart(ctx, {
         type: "bar",
         data: {
             labels: labels,
@@ -361,6 +353,7 @@ document.getElementById("processBtn").addEventListener("click", function () {
 
 document.getElementById("genderFilter").addEventListener("change", applyFilters);
 document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
 
 
 

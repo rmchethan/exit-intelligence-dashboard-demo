@@ -226,4 +226,38 @@ function getHighestReason(data) {
     };
 }
 
+// Department Breakdown Bar Chart
+
+let departmentChart;
+
+function renderDepartmentChart(data) {
+    const deptCounts = {};
+
+    data.forEach(record => {
+        const dept = record["Department"] || "Unknown";
+        deptCounts[dept] = (deptCounts[dept] || 0) + 1;
+    });
+
+    const labels = Object.keys(deptCounts);
+    const values = Object.values(deptCounts);
+
+    if (departmentChart) departmentChart.destroy();
+
+    const ctx = document.getElementById("departmentChart").getContext("2d");
+
+    departmentChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Exits by Department",
+                data: values
+            }]
+        }
+    });
+}
+
+
+
+
 

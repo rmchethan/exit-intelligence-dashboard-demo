@@ -289,15 +289,31 @@ function renderDepartmentChart(data) {
     const ctx = document.getElementById("departmentChart").getContext("2d");
 
      departmentChart = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Exits by Department",
-                data: values
-            }]
+    type: "bar",
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Exits by Department",
+            data: values,
+            backgroundColor: "#4caf50" // optional color
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    precision:0
+                }
+            }
         }
-    });
+    }
+});
 }
 
 //Insight Panel (Rule-Based Intelligence)
@@ -353,6 +369,7 @@ document.getElementById("processBtn").addEventListener("click", function () {
 
 document.getElementById("genderFilter").addEventListener("change", applyFilters);
 document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
 
 
 

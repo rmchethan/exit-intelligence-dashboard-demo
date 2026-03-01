@@ -69,6 +69,17 @@ function processExitData() {
 
     //Populate Branch Dynamically
     populateBranchFilter(exitData);
+    
+    renderReasonChart(filtered);
+    renderTrendChart(filtered);
+    renderDepartmentChart(filtered);
+
+    document.getElementById("insightPanel").innerText =
+        generateInsights(filtered);
+   
+}
+
+
     function applyFilters() {
     const gender = document.getElementById("genderFilter").value;
     const branch = document.getElementById("branchFilter").value;
@@ -89,11 +100,11 @@ function processExitData() {
 
     document.getElementById("insightPanel").innerText =
         generateInsights(filtered);
-    document.getElementById("genderFilter").addEventListener("change", applyFilters);
-    document.getElementById("branchFilter").addEventListener("change", applyFilters);
 }
 
-    
+document.getElementById("genderFilter").addEventListener("change", applyFilters);
+document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
 
     // Update KPI cards
     document.getElementById("kpiTotalExits").innerText = totalExits;
@@ -330,6 +341,7 @@ function populateBranchFilter(data) {
         branchSelect.appendChild(option);
     });
 }
+
 
 
 

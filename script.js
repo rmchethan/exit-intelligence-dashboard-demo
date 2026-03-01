@@ -45,38 +45,33 @@ function updateStatus(message) {
 }
 
 function processExitData() {
-    console.log(exitData);
     if (!exitData.length) return;
 
     const totalExits = exitData.length;
-
     const voluntaryCount = exitData.filter(e =>
         e["Voluntary/Involuntary"]?.toLowerCase() === "voluntary"
     ).length;
 
     const voluntaryPercent = ((voluntaryCount / totalExits) * 100).toFixed(1);
-
     const avgTenure = calculateAverageTenure(exitData);
-
-    const topReason = getTopExitReason(exitData);
-    
     const highest = getHighestReason(exitData);
-    document.getElementById("highestReason").innerText =
-    `${highest.reason} (${highest.count})`;
-    
-    document.getElementById("insightPanel").innerText =
-    generateInsights(exitData);
 
-    //Populate Branch Dynamically
+    document.getElementById("highestReason").innerText =
+        `${highest.reason} (${highest.count})`;
+
+    document.getElementById("insightPanel").innerText =
+        generateInsights(exitData);
+
+    document.getElementById("kpiTotalExits").innerText = totalExits;
+    document.getElementById("kpiVoluntary").innerText = voluntaryPercent + "%";
+    document.getElementById("kpiTenure").innerText = avgTenure + " months";
+
     populateBranchFilter(exitData);
-    
+
+    // Use exitData here, never filtered
     renderReasonChart(exitData);
     renderTrendChart(exitData);
     renderDepartmentChart(exitData);
-
-    document.getElementById("insightPanel").innerText =
-        generateInsights(filtered);
-   
 }
 
 
@@ -343,6 +338,7 @@ function populateBranchFilter(data) {
         branchSelect.appendChild(option);
     });
 }
+
 
 
 

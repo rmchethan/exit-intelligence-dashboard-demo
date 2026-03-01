@@ -275,7 +275,6 @@ let departmentChart;
 
 function renderDepartmentChart(data) {
     const deptCounts = {};
-
     data.forEach(record => {
         const dept = record["Department"] || "Unknown";
         deptCounts[dept] = (deptCounts[dept] || 0) + 1;
@@ -288,32 +287,33 @@ function renderDepartmentChart(data) {
 
     const ctx = document.getElementById("departmentChart").getContext("2d");
 
-     departmentChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-        labels: labels,
-        datasets: [{
-            label: "Exits by Department",
-            data: values,
-            backgroundColor: "#4caf50" // optional color
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: false }
+    departmentChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Exits by Department",
+                data: values,
+                backgroundColor: "#4caf50" // optional styling
+            }]
         },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    precision:0
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // lets it fill the div
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
                 }
             }
         }
-    }
-});
+    });
 }
 
 //Insight Panel (Rule-Based Intelligence)
@@ -369,6 +369,7 @@ document.getElementById("processBtn").addEventListener("click", function () {
 
 document.getElementById("genderFilter").addEventListener("change", applyFilters);
 document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
 
 
 

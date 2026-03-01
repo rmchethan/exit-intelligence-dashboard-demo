@@ -115,7 +115,7 @@ document.getElementById("branchFilter").addEventListener("change", applyFilters)
     renderReasonChart(exitData);
     renderTrendChart(exitData);
     renderDepartmentChart(exitData);
-}
+
 
 function calculateAverageTenure(data) {
     let totalMonths = 0;
@@ -341,6 +341,7 @@ function populateBranchFilter(data) {
         branchSelect.appendChild(option);
     });
 }
+
 
 
 

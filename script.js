@@ -66,6 +66,33 @@ function processExitData() {
     
     document.getElementById("insightPanel").innerText =
     generateInsights(exitData);
+
+    //Populate Branch Dynamically
+    populateBranchFilter(exitData);
+    function applyFilters() {
+    const gender = document.getElementById("genderFilter").value;
+    const branch = document.getElementById("branchFilter").value;
+
+    let filtered = exitData;
+
+    if (gender !== "All") {
+        filtered = filtered.filter(d => d["Gender"] === gender);
+    }
+
+    if (branch !== "All") {
+        filtered = filtered.filter(d => d["Branch"] === branch);
+    }
+
+    renderReasonChart(filtered);
+    renderTrendChart(filtered);
+    renderDepartmentChart(filtered);
+
+    document.getElementById("insightPanel").innerText =
+        generateInsights(filtered);
+    document.getElementById("genderFilter").addEventListener("change", applyFilters);
+    document.getElementById("branchFilter").addEventListener("change", applyFilters);
+}
+
     
 
     // Update KPI cards
@@ -289,6 +316,21 @@ function generateInsights(data) {
 
     return insightText || "No major risk patterns detected.";
 }
+
+function populateBranchFilter(data) {
+    const branches = [...new Set(data.map(d => d["Branch"]))];
+    const branchSelect = document.getElementById("branchFilter");
+
+    branchSelect.innerHTML = '<option value="All">All Branches</option>';
+
+    branches.forEach(branch => {
+        const option = document.createElement("option");
+        option.value = branch;
+        option.textContent = branch;
+        branchSelect.appendChild(option);
+    });
+}
+
 
 
 

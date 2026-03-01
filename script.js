@@ -120,6 +120,8 @@ function renderReasonChart(data) {
     const labels = Object.keys(reasonCounts);
     const values = Object.values(reasonCounts);
 
+    const total = values.reduce((a, b) => a + b, 0);
+
     if (reasonChart) reasonChart.destroy();
 
     const ctx = document.getElementById("reasonChart").getContext("2d");
@@ -131,6 +133,19 @@ function renderReasonChart(data) {
             datasets: [{
                 data: values
             }]
+        },
+        options: {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.raw;
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${context.label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
         }
     });
 }
@@ -182,5 +197,6 @@ function renderTrendChart(data) {
         }
     });
 }
+
 
 

@@ -98,3 +98,23 @@ button:hover {
     }
 }
 
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.chart-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.insight-card {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+

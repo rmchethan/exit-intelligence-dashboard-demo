@@ -4,22 +4,6 @@ let headcountData = [];
 let trendChart;
 let reasonChart;
 
-document.getElementById("processBtn").addEventListener("click", function () {
-    const exitFile = document.getElementById("exitFile").files[0];
-    const headcountFile = document.getElementById("headcountFile").files[0];
-
-    if (!exitFile) {
-        updateStatus("❌ Exit file is required.");
-        return;
-    }
-
-    parseCSV(exitFile, "exit");
-
-    if (headcountFile) {
-        parseCSV(headcountFile, "headcount");
-    }
-});
-
 function parseCSV(file, type) {
     Papa.parse(file, {
         header: true,
@@ -81,13 +65,8 @@ function processExitData() {
 
     let filtered = exitData;
 
-    if (gender !== "All") {
-        filtered = filtered.filter(d => d["Gender"] === gender);
-    }
-
-    if (branch !== "All") {
-        filtered = filtered.filter(d => d["Branch"] === branch);
-    }
+    if (gender !== "All") filtered = filtered.filter(d => d["Gender"] === gender);
+    if (branch !== "All") filtered = filtered.filter(d => d["Branch"] === branch);
 
     renderReasonChart(filtered);
     renderTrendChart(filtered);
@@ -96,6 +75,7 @@ function processExitData() {
     document.getElementById("insightPanel").innerText =
         generateInsights(filtered);
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("genderFilter").addEventListener("change", applyFilters);
@@ -338,6 +318,18 @@ function populateBranchFilter(data) {
         branchSelect.appendChild(option);
     });
 }
+
+document.getElementById("processBtn").addEventListener("click", function () {
+    const exitFile = document.getElementById("exitFile").files[0];
+    if (!exitFile) {
+        updateStatus("❌ Exit file is required.");
+        return;
+    }
+    parseCSV(exitFile, "exit");
+});
+
+document.getElementById("genderFilter").addEventListener("change", applyFilters);
+document.getElementById("branchFilter").addEventListener("change", applyFilters);
 
 
 

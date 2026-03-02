@@ -659,7 +659,10 @@ document.getElementById("processBtn").addEventListener("click", function () {
         updateStatus("❌ Exit file is required.");
         return;
     }
-    parseCSV(exitFile, "exit");
+    document.getElementById("headcountFile")
+    .addEventListener("change", function () {
+        parseCSV(this.files[0], "headcount");
+});
 });
 
 function calculateQuarterlyAttrition(exitData, headcountData) {
@@ -690,12 +693,13 @@ function calculateQuarterlyAttrition(exitData, headcountData) {
 }
 
 function calculateAttritionRate() {
-    if (!headcountData.length) return "--";
+    if (!headcountData || headcountData.length === 0) return "--";
 
     const totalEmployees = headcountData.length;
 
     const exitedEmployees = headcountData.filter(emp =>
-        emp["Status"]?.toLowerCase() === "exited"
+        emp["Status"] &&
+        emp["Status"].toString().toLowerCase().trim() === "exited"
     ).length;
 
     if (totalEmployees === 0) return "--";
@@ -704,7 +708,6 @@ function calculateAttritionRate() {
 
     return rate + "%";
 }
-
 
 
 

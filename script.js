@@ -9,19 +9,18 @@ function parseCSV(file, type) {
         header: true,
         skipEmptyLines: true,
         complete: function (results) {
-    if (type === "exit") {
-        exitData = results.data;
-        updateStatus("✅ Exit file loaded. Records: " + exitData.length);
-        processExitData();
-    } else {
-        headcountData = results.data;
-        updateStatus("✅ Headcount file loaded. Records: " + headcountData.length);
+            if (type === "exit") {
+                exitData = results.data;
+                updateStatus("✅ Exit file loaded. Records: " + exitData.length);
+                processExitData();
+            } else {
+                headcountData = results.data;
+                updateStatus("✅ Headcount file loaded. Records: " + headcountData.length);
 
-        // Update attrition KPI immediately
-        const attritionRate = calculateAttritionRate();
-        document.getElementById("kpiAttrition").innerText = attritionRate;
-    }
-}
+                // Update attrition KPI immediately
+                const attritionRate = calculateAttritionRate();
+                document.getElementById("kpiAttrition").innerText = attritionRate;
+            }
         },
         error: function (error) {
             updateStatus("❌ Error parsing file: " + error.message);
@@ -29,9 +28,6 @@ function parseCSV(file, type) {
     });
 }
 
-function updateStatus(message) {
-    document.getElementById("statusOutput").innerText = message;
-}
 
 function calculateAttritionFromEmployeeFile(headcountData) {
     if (!headcountData.length) return "--";
@@ -496,6 +492,7 @@ function calculateAttritionRate() {
 
     return rate + "%";
 }
+
 
 
 

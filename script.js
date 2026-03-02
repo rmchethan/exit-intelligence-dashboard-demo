@@ -110,10 +110,12 @@ function applyFilters() {
     if (gender !== "All") filtered = filtered.filter(d => d["Gender"] === gender);
     if (branch !== "All") filtered = filtered.filter(d => d["Branch"] === branch);
 
-    // Update charts and insights for filtered data
     renderReasonChart(filtered);
     renderTrendChart(filtered);
     renderDepartmentChart(filtered);
+    renderRiskHeatmap(filtered);       // risk heatmap updates with filters
+    renderSurvivalChart(filtered);      // survival curve updates with filters
+
     document.getElementById("insightPanel").innerText = generateInsights(filtered);
 }
 
@@ -610,6 +612,71 @@ function calculateAttritionRate() {
     const rate = ((exitedEmployees / totalEmployees) * 100).toFixed(1);
 
     return rate + "%";
+}
+
+let survivalChart;
+
+function calculateSurvivalData(data) {
+    // Prepare employee tenures in months
+    const tenures = data.map(d => {
+        const join = new Date(d["Join Date"]);
+        const exit = d["Exit Date"] ? new Date(d["Exit Date"]) : new Date();
+        if (isNaN(join) || isNaN(exit)) return null;
+        return (exit - join) / (1000 * 60 * 60 * 24 * 30.44); // months
+    }).filter(v => v !== null);
+
+    tenures.sort((a, b) => a - b); // ascending
+
+    const survival = [];
+    const n = tenures.length;
+
+    tenures.forEach((t, i) => {
+        const survPercent = ((n - i) / n) * 100;
+        survival.push({ tenure: t, survival: survPercent });
+    });
+
+    return survival;
+}
+
+
+function renderSurvivalChart(data) {
+    const survivalData = calculateSurvivalData(data);
+    const labels = survivalData.map(d => d.tenure.toFixed(1));
+    const values = survivalData.map(d => d.survival.toFixed(1));
+
+    const ctx = document.getElementById("survivalChart").getContext("2d");
+    if (survivalChart) survivalChart.destroy();
+
+    survivalChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Employee Survival %",
+                data: values,
+                fill: false,
+                borderColor: "#1976d2",
+                tension: 0.2,
+                pointRadius: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                x: {
+                    title: { display: true, text: "Tenure (Months)" }
+                },
+                y: {
+                    title: { display: true, text: "Survival %" },
+                    min: 0,
+                    max: 100
+                }
+            }
+        }
+    });
 }
 
 

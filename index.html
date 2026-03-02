@@ -4,132 +4,142 @@
     <meta charset="UTF-8">
     <title>Exit Intelligence Dashboard (Demo)</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
-   
 
-    <!-- HEADER -->
-    <header class="header">
-        <h1>Exit Intelligence Dashboard</h1>
-        <span class="badge">Demo Model</span>
-    </header>
+<!-- HEADER -->
+<header class="header">
+    <h1>Exit Intelligence Dashboard</h1>
+    <span class="badge">Demo Model</span>
+</header>
 
-    <!-- UPLOAD SECTION -->
-    <section class="card upload-card">
-        <h2>Upload Data</h2>
+<!-- UPLOAD SECTION -->
+<section class="card upload-card">
+    <h2>Upload Data</h2>
 
-        <div class="upload-group">
-            <label>Exit File (Required)</label>
-            <input type="file" id="exitFile" accept=".csv">
-        </div>
-
-        <div class="upload-group">
-            <label>Headcount File (Optional)</label>
-            <input type="file" id="headcountFile" accept=".csv">
-        </div>
-
-        <button id="processBtn">Process Data</button>
-
-        <div id="statusOutput" class="status-box">
-            No files processed yet.
-        </div>
-    </section>
-
-    <!-- EXECUTIVE SNAPSHOT -->
-    <section class="kpi-grid">
-        <div class="kpi-card">
-            <h3>Total Exits</h3>
-            <p id="kpiTotalExits">--</p>
-        </div>
-
-        <div class="kpi-card">
-            <h3>Voluntary %</h3>
-            <p id="kpiVoluntary">--</p>
-        </div>
-
-        <div class="kpi-card">
-            <h3>Avg Tenure</h3>
-            <p id="kpiTenure">--</p>
-        </div>
-
-        <div class="kpi-card">
-            <h3>Highest Attrition Dept</h3>
-            <p id="kpiHighestDept">--</p>
-        </div>
-
-        <div class="kpi-card">
-            <h3>Top Exit Reason</h3>
-            <p id="kpiReason">--</p>
-        </div>
-
-        <div class="kpi-card">
-            <h3>High Performer Loss %</h3>
-            <p id="kpiHighPerf">--</p>
-        </div>
-
-        <div class="kpi-card">
-            <h3>Highest Exit Reason</h3>
-            <p id="highestReason">-</p>
-        </div>
-    </section>
-    
-    <select id="genderFilter">
-    <option value="All" selected>All Genders</option>
-    <option value="Male">Male</option>
-    <option value="Female">Female</option>
-    </select>
-
-    <select id="branchFilter">
-    <option value="All" selected>All Branches</option>
-    </select>
-
-    <!-- CHART SECTION -->
-    <section class="dashboard-grid">
-
-    <!-- LEFT SIDE -->
-    <div class="chart-card">
-        <h3>Exit Reason Distribution</h3>
-        <canvas id="reasonChart"></canvas>
+    <div class="upload-group">
+        <label>Exit File (Required)</label>
+        <input type="file" id="exitFile" accept=".csv">
     </div>
 
-    <div class="chart-card">
-        <h3>Quarterly Exit Trend</h3>
-        <canvas id="trendChart"></canvas>
+    <div class="upload-group">
+        <label>Headcount File (Optional)</label>
+        <input type="file" id="headcountFile" accept=".csv">
     </div>
 
-    <div class="chart-card">
-        <h3>Department Breakdown</h3>
-        <canvas id="departmentChart"></canvas>
-    </div>
+    <button id="processBtn">Process Data</button>
 
-    <!-- RIGHT SIDE -->
-    <div class="insight-card">
-        <h3>Strategic Insights</h3>
-        <p id="insightPanel"></p>
+    <div id="statusOutput" class="status-box">
+        No files processed yet.
     </div>
-        
 </section>
 
-    
-     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-     <script src="script.js"></script>
+<!-- KPI SNAPSHOT -->
+<section class="kpi-grid">
+
+    <div class="kpi-card">
+        <h3>Total Exits</h3>
+        <p id="kpiTotalExits">--</p>
+    </div>
+
+    <div class="kpi-card">
+        <h3>Voluntary %</h3>
+        <p id="kpiVoluntary">--</p>
+    </div>
+
+    <div class="kpi-card">
+        <h3>Avg Tenure</h3>
+        <p id="kpiTenure">--</p>
+    </div>
+
+    <div class="kpi-card">
+        <h3>Highest Attrition Dept</h3>
+        <p id="kpiHighestDept">--</p>
+    </div>
+
+    <div class="kpi-card">
+        <h3>Top Exit Reason</h3>
+        <p id="kpiReason">--</p>
+    </div>
+
+    <div class="kpi-card">
+        <h3>High Performer Loss %</h3>
+        <p id="kpiHighPerf">--</p>
+    </div>
+
+    <div class="kpi-card">
+        <h3>Highest Exit Reason</h3>
+        <p id="highestReason">--</p>
+    </div>
+
+</section>
+
+<!-- FILTER BAR -->
+<section class="filter-bar">
+    <div class="filter-group">
+        <label>Gender</label>
+        <select id="genderFilter">
+            <option value="All" selected>All Genders</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label>Branch</label>
+        <select id="branchFilter">
+            <option value="All" selected>All Branches</option>
+        </select>
+    </div>
+</section>
+
+<!-- DASHBOARD GRID -->
+<section class="dashboard-grid">
+
+    <!-- LEFT COLUMN (Charts) -->
+    <div class="left-column">
+
+        <div class="chart-card">
+            <h3>Exit Reason Distribution</h3>
+            <div class="chart-container">
+                <canvas id="reasonChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h3>Quarterly Exit Trend</h3>
+            <div class="chart-container">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h3>Department Breakdown</h3>
+            <div class="chart-container">
+                <canvas id="departmentChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN (Insights) -->
+    <div class="right-column">
+        <div class="insight-card">
+            <h3>Strategic Insights</h3>
+            <p id="insightPanel">Upload data to generate insights.</p>
+        </div>
+    </div>
+
+</section>
+
+<!-- Plugins (Order Matters) -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<script src="script.js"></script>
+
 </body>
-    
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

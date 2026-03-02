@@ -9,14 +9,19 @@ function parseCSV(file, type) {
         header: true,
         skipEmptyLines: true,
         complete: function (results) {
-            if (type === "exit") {
-                exitData = results.data;
-                updateStatus("✅ Exit file loaded. Records: " + exitData.length);
-                processExitData();
-            } else {
-                headcountData = results.data;
-                updateStatus("✅ Headcount file loaded. Records: " + headcountData.length);
-            }
+    if (type === "exit") {
+        exitData = results.data;
+        updateStatus("✅ Exit file loaded. Records: " + exitData.length);
+        processExitData();
+    } else {
+        headcountData = results.data;
+        updateStatus("✅ Headcount file loaded. Records: " + headcountData.length);
+
+        // Update attrition KPI immediately
+        const attritionRate = calculateAttritionRate();
+        document.getElementById("kpiAttrition").innerText = attritionRate;
+    }
+}
         },
         error: function (error) {
             updateStatus("❌ Error parsing file: " + error.message);
@@ -476,6 +481,21 @@ function calculateQuarterlyAttrition(exitData, headcountData) {
     return result;
 }
 
+function calculateAttritionRate() {
+    if (!headcountData.length) return "--";
+
+    const totalEmployees = headcountData.length;
+
+    const exitedEmployees = headcountData.filter(emp =>
+        emp["Status"]?.toLowerCase() === "exited"
+    ).length;
+
+    if (totalEmployees === 0) return "--";
+
+    const rate = ((exitedEmployees / totalEmployees) * 100).toFixed(1);
+
+    return rate + "%";
+}
 
 
 

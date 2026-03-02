@@ -695,49 +695,6 @@ function calculateSurvivalData(data) {
 }
 
 
-function renderSurvivalChart(data) {
-    const survivalData = calculateSurvivalData(data);
-    const labels = survivalData.map(d => d.tenure.toFixed(1));
-    const values = survivalData.map(d => d.survival.toFixed(1));
-
-
-
-    survivalChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Employee Survival %",
-                data: values,
-                fill: false,
-                borderColor: "#1976d2",
-                tension: 0.2,
-                pointRadius: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: true }
-            },
-            scales: {
-                x: {
-                    title: { display: true, text: "Tenure (Months)" }
-                },
-                y: {
-                    title: { display: true, text: "Survival %" },
-                    min: 0,
-                    max: 100
-                }
-            }
-        }
-    });
-}
-
-
-
-
-
 
 
 

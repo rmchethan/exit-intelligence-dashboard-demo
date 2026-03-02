@@ -4,6 +4,15 @@ let headcountData = [];
 let trendChart;
 let reasonChart;
 
+function updateStatus(message) {
+    const statusEl = document.getElementById("statusOutput");
+    if (statusEl) {
+        statusEl.innerText = message;
+    }
+}
+
+
+
 function parseCSV(file, type) {
     Papa.parse(file, {
         header: true,
@@ -492,6 +501,7 @@ function calculateAttritionRate() {
 
     return rate + "%";
 }
+
 
 
 

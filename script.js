@@ -97,6 +97,7 @@ function processExitData() {
     renderTrendChart(exitData);
     renderDepartmentChart(exitData);
     renderRiskHeatmap(exitData);
+    renderSurvivalChart(exitData); // full dataset by default
 }
 
 
@@ -617,18 +618,22 @@ function calculateAttritionRate() {
 let survivalChart;
 
 function calculateSurvivalData(data) {
-    // Prepare employee tenures in months
+    // Today’s date for active employees
+    const today = new Date();
+
     const tenures = data.map(d => {
         const join = new Date(d["Join Date"]);
-        const exit = d["Exit Date"] ? new Date(d["Exit Date"]) : new Date();
+        const exit = d["Exit Date"] ? new Date(d["Exit Date"]) : today;
         if (isNaN(join) || isNaN(exit)) return null;
         return (exit - join) / (1000 * 60 * 60 * 24 * 30.44); // months
     }).filter(v => v !== null);
 
+    if (!tenures.length) return [];
+
     tenures.sort((a, b) => a - b); // ascending
 
-    const survival = [];
     const n = tenures.length;
+    const survival = [];
 
     tenures.forEach((t, i) => {
         const survPercent = ((n - i) / n) * 100;
@@ -644,8 +649,7 @@ function renderSurvivalChart(data) {
     const labels = survivalData.map(d => d.tenure.toFixed(1));
     const values = survivalData.map(d => d.survival.toFixed(1));
 
-    const ctx = document.getElementById("survivalChart").getContext("2d");
-    if (survivalChart) survivalChart.destroy();
+
 
     survivalChart = new Chart(ctx, {
         type: "line",
@@ -678,6 +682,7 @@ function renderSurvivalChart(data) {
         }
     });
 }
+
 
 
 

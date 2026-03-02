@@ -351,7 +351,7 @@ function renderDepartmentChart(data) {
 },
 plugins: [ChartDataLabels]
         
-}
+});
 
 //Insight Panel (Rule-Based Intelligence)
 
@@ -406,6 +406,7 @@ document.getElementById("processBtn").addEventListener("click", function () {
 
 document.getElementById("genderFilter").addEventListener("change", applyFilters);
 document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
 
 
 

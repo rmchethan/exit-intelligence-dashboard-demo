@@ -90,11 +90,13 @@ function processExitData() {
 
     // Populate filters
     populateBranchFilter(exitData);
+    
 
     // Render all charts for the full dataset by default
     renderReasonChart(exitData);
     renderTrendChart(exitData);
     renderDepartmentChart(exitData);
+    renderRiskHeatmap(exitData);
 }
 
 
@@ -166,6 +168,7 @@ function getHighestAttritionDept(data) {
 
 
 
+
 function getTopExitReason(data) {
     const reasonCounts = {};
 
@@ -199,6 +202,113 @@ function calculateHighPerformerLoss(data) {
     const percent = ((highPerformers.length / data.length) * 100).toFixed(1);
 
     return percent + "%";
+}
+
+function calculateDeptRisk(data) {
+    const deptData = {};
+
+    data.forEach(d => {
+        const dept = d["Department"] || "Unknown";
+        if (!deptData[dept]) {
+            deptData[dept] = {
+                total: 0,
+                voluntary: 0,
+                highPerfLoss: 0,
+                avgTenureSum: 0,
+                count: 0,
+                topReason: {}
+            };
+        }
+
+        deptData[dept].count += 1;
+        if (d["Voluntary/Involuntary"]?.toLowerCase() === "voluntary") deptData[dept].voluntary += 1;
+        if (d["Performance Rating"] === "1+" || d["Performance Rating"] === "1") deptData[dept].highPerfLoss += 1;
+
+        const joinDate = new Date(d["Join Date"]);
+        const exitDate = new Date(d["Exit Date"]);
+        if (!isNaN(joinDate) && !isNaN(exitDate)) {
+            const months = (exitDate - joinDate) / (1000*60*60*24*30.44);
+            deptData[dept].avgTenureSum += months;
+        }
+
+        const reason = d["Exit Reason Category"] || "Unknown";
+        deptData[dept].topReason[reason] = (deptData[dept].topReason[reason] || 0) + 1;
+    });
+
+    // Compute risk score
+    const riskScores = [];
+    for (let dept in deptData) {
+        const info = deptData[dept];
+        const voluntaryRate = info.voluntary / info.count;
+        const highPerfRate = info.highPerfLoss / info.count;
+        const avgTenure = info.avgTenureSum / info.count;
+        const topReason = Object.keys(info.topReason).reduce((a,b) => info.topReason[a] > info.topReason[b] ? a : b);
+
+        let score = 0;
+        if (voluntaryRate > 0.5) score += 2;
+        if (highPerfRate > 0.2) score += 3;
+        if (avgTenure < 12) score += 1;
+        if (topReason === "Manager Issues") score += 2;
+        if (topReason === "Compensation") score += 1;
+
+        riskScores.push({
+            dept,
+            score,
+            voluntaryRate,
+            highPerfRate,
+            avgTenure,
+            topReason
+        });
+    }
+
+    return riskScores;
+}
+
+
+let riskHeatmapChart;
+
+function renderRiskHeatmap(data) {
+    const riskData = calculateDeptRisk(data);
+
+    const labels = riskData.map(d => d.dept);
+    const scores = riskData.map(d => d.score);
+    const bgColors = scores.map(s => {
+        if (s >= 6) return "#d32f2f";      // high risk
+        else if (s >= 3) return "#fbc02d"; // medium risk
+        else return "#388e3c";            // low risk
+    });
+
+    const ctx = document.getElementById("riskHeatmapChart").getContext("2d");
+    if (riskHeatmapChart) riskHeatmapChart.destroy();
+
+    riskHeatmapChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Risk Score",
+                data: scores,
+                backgroundColor: bgColors
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    color: '#fff',
+                    font: { weight: 'bold' },
+                    formatter: function(value) { return value; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
 }
 
 
@@ -501,6 +611,7 @@ function calculateAttritionRate() {
 
     return rate + "%";
 }
+
 
 
 

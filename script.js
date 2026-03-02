@@ -28,12 +28,6 @@ function updateStatus(message) {
     document.getElementById("statusOutput").innerText = message;
 }
 
-function getHighPerformerLossPercent(data) {
-    const highPerf = data.filter(d => parseFloat(d["Current Performance Rating"]) >= 4);
-    return data.length ? ((highPerf.length / data.length) * 100).toFixed(1) + "%" : "--";
-}
-
-
 
 function processExitData() {
     if (!exitData.length) return;
@@ -231,7 +225,7 @@ function renderReasonChart(data) {
     },
     plugins: [ChartDataLabels]
 });
-    
+    }
 
 function getQuarter(dateString) {
     const date = new Date(dateString);
@@ -330,28 +324,28 @@ function renderDepartmentChart(data) {
             datasets: [{
                 label: "Exits by Department",
                 data: values,
-                backgroundColor: "#4caf50" // optional styling
+                backgroundColor: "#4caf50"
             }]
         },
         options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-        legend: { display: false },
-        datalabels: {
-            anchor: 'end',
-            align: 'top',
-            formatter: function(value, context) {
-                const total = context.chart._metasets[0].total;
-                const sum = context.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);
-                return ((value / sum) * 100).toFixed(1) + "%";
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    formatter: function(value, context) {
+                        const sum = context.chart.data.datasets[0].data
+                            .reduce((a, b) => a + b, 0);
+                        return ((value / sum) * 100).toFixed(1) + "%";
+                    }
+                }
             }
-        }
-    }
-},
-plugins: [ChartDataLabels]
-        
-});
+        },
+        plugins: [ChartDataLabels]
+    });
+}
 
 //Insight Panel (Rule-Based Intelligence)
 
@@ -404,8 +398,8 @@ document.getElementById("processBtn").addEventListener("click", function () {
     parseCSV(exitFile, "exit");
 });
 
-document.getElementById("genderFilter").addEventListener("change", applyFilters);
-document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
+
 
 
 

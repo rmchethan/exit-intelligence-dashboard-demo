@@ -28,6 +28,23 @@ function updateStatus(message) {
     document.getElementById("statusOutput").innerText = message;
 }
 
+function calculateAttritionFromEmployeeFile(headcountData) {
+    if (!headcountData.length) return "--";
+
+    const activeCount = headcountData.filter(e =>
+        e["Status"]?.toLowerCase() === "active"
+    ).length;
+
+    const exitedCount = headcountData.filter(e =>
+        e["Status"]?.toLowerCase() === "exited"
+    ).length;
+
+    const totalEmployees = activeCount + exitedCount;
+
+    if (!totalEmployees) return "--";
+
+    return ((exitedCount / totalEmployees) * 100).toFixed(1) + "%";
+}
 
 function processExitData() {
     if (!exitData.length) return;
@@ -42,6 +59,12 @@ function processExitData() {
     const highestDept = getHighestAttritionDept(exitData);
     const highPerfLoss = calculateHighPerformerLoss(exitData);
 
+    let attritionRate = "--";
+    if (headcountData.length) {
+    attritionRate = calculateAttritionFromEmployeeFile(headcountData);
+    }
+
+    document.getElementById("kpiAttrition").innerText = attritionRate;
 
     // Update KPI cards
     document.getElementById("kpiTotalExits").innerText = totalExits;
@@ -169,6 +192,7 @@ function calculateHighPerformerLoss(data) {
 }
 
 
+
 function renderReasonChart(data) {
     const reasonCounts = {};
 
@@ -226,6 +250,33 @@ function renderReasonChart(data) {
     plugins: [ChartDataLabels]
 });
     }
+
+function calculateQuarterlyAttrition(exitData, headcountData) {
+    if (!headcountData.length) return null;
+
+    const quarterlyExits = calculateQuarterlyTrend(exitData);
+    const quarterlyHeadcount = {};
+
+    headcountData.forEach(row => {
+        const quarter = getQuarter(row["Date"]);
+        if (!quarter) return;
+
+        quarterlyHeadcount[quarter] = parseFloat(row["Headcount"] || 0);
+    });
+
+    const result = {};
+
+    for (let quarter in quarterlyExits) {
+        const exits = quarterlyExits[quarter];
+        const hc = quarterlyHeadcount[quarter];
+
+        if (hc) {
+            result[quarter] = ((exits / hc) * 100).toFixed(1);
+        }
+    }
+
+    return result;
+}
 
 function getQuarter(dateString) {
     const date = new Date(dateString);
@@ -397,6 +448,7 @@ document.getElementById("processBtn").addEventListener("click", function () {
     }
     parseCSV(exitFile, "exit");
 });
+
 
 
 

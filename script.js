@@ -1,3 +1,54 @@
+let survivalChart; // make sure this is global at the top of your JS
+
+function renderSurvivalChart(data) {
+    // Calculate survival data
+    const survivalData = calculateSurvivalData(data);
+    if (!survivalData.length) return; // exit if no data
+
+    const labels = survivalData.map(d => d.tenure.toFixed(1));
+    const values = survivalData.map(d => d.survival.toFixed(1));
+
+    // Get the canvas context
+    const canvas = document.getElementById("survivalChart");
+    if (!canvas) return; // exit if canvas not found
+    const ctx = canvas.getContext("2d");
+
+    // Destroy previous chart if exists
+    if (survivalChart) survivalChart.destroy();
+
+    // Render the survival chart
+    survivalChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Employee Survival %",
+                data: values,
+                fill: false,
+                borderColor: "#1976d2",
+                tension: 0.2,
+                pointRadius: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                x: {
+                    title: { display: true, text: "Tenure (Months)" }
+                },
+                y: {
+                    title: { display: true, text: "Survival %" },
+                    min: 0,
+                    max: 100
+                }
+            }
+        }
+    });
+}
+
 let exitData = [];
 let headcountData = [];
 
@@ -682,6 +733,7 @@ function renderSurvivalChart(data) {
         }
     });
 }
+
 
 
 

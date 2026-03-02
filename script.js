@@ -1,4 +1,43 @@
+
+
 let survivalChart; // make sure this is global at the top of your JS
+
+function calculateSurvivalData(data) {
+    if (!data || !data.length) return [];
+
+    // Step 1: Calculate tenure in months for each exit
+    const tenures = data.map(record => {
+        const joinDate = new Date(record["Join Date"]);
+        const exitDate = new Date(record["Exit Date"]);
+
+        if (isNaN(joinDate) || isNaN(exitDate)) return null;
+
+        return (exitDate - joinDate) / (1000 * 60 * 60 * 24 * 30.44);
+    }).filter(t => t !== null);
+
+    if (!tenures.length) return [];
+
+    // Step 2: Sort tenures ascending
+    tenures.sort((a, b) => a - b);
+
+    const totalEmployees = tenures.length;
+    let survivors = totalEmployees;
+
+    const survivalData = [];
+
+    // Step 3: Build survival curve
+    tenures.forEach((tenure, index) => {
+        survivors = totalEmployees - index;
+        const survivalPercent = (survivors / totalEmployees) * 100;
+
+        survivalData.push({
+            tenure: tenure,
+            survival: survivalPercent
+        });
+    });
+
+    return survivalData;
+}
 
 function renderSurvivalChart(data) {
     // Calculate survival data
@@ -6,7 +45,7 @@ function renderSurvivalChart(data) {
     if (!survivalData.length) return; // exit if no data
 
     const labels = survivalData.map(d => d.tenure.toFixed(1));
-    const values = survivalData.map(d => d.survival.toFixed(1));
+    const values = survivalData.map(d => Number(d.survival.toFixed(1)));
 
     // Get the canvas context
     const canvas = document.getElementById("survivalChart");
@@ -665,6 +704,7 @@ function calculateAttritionRate() {
 
     return rate + "%";
 }
+
 
 
 

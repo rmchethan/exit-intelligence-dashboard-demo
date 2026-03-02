@@ -117,4 +117,15 @@ button:hover {
     border-radius: 8px;
 }
 
+.chart-container {
+    position: relative;
+    height: 350px;   /* Controls chart height */
+    width: 100%;
+}
+
+.chart-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+}
 

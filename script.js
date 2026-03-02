@@ -449,6 +449,32 @@ document.getElementById("processBtn").addEventListener("click", function () {
     parseCSV(exitFile, "exit");
 });
 
+function calculateQuarterlyAttrition(exitData, headcountData) {
+    if (!headcountData.length) return null;
+
+    const quarterlyExits = calculateQuarterlyTrend(exitData);
+    const quarterlyHeadcount = {};
+
+    headcountData.forEach(row => {
+        const quarter = getQuarter(row["Date"]);
+        if (!quarter) return;
+
+        quarterlyHeadcount[quarter] = parseFloat(row["Headcount"] || 0);
+    });
+
+    const result = {};
+
+    for (let quarter in quarterlyExits) {
+        const exits = quarterlyExits[quarter];
+        const hc = quarterlyHeadcount[quarter];
+
+        if (hc) {
+            result[quarter] = ((exits / hc) * 100).toFixed(1);
+        }
+    }
+
+    return result;
+}
 
 
 

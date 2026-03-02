@@ -193,28 +193,45 @@ function renderReasonChart(data) {
     const ctx = document.getElementById("reasonChart").getContext("2d");
 
     reasonChart = new Chart(ctx, {
-        type: "pie",
-        data: {
-            labels: labels,
-            datasets: [{
-                data: values
-            }]
-        },
-        options: {
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const value = context.raw;
-                            const percentage = ((value / total) * 100).toFixed(1);
-                            return `${context.label}: ${value} (${percentage}%)`;
-                        }
+    type: "pie",
+    data: {
+        labels: labels,
+        datasets: [{
+            data: values
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: "bottom"
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const value = context.raw;
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        return `${context.label}: ${value} (${percentage}%)`;
                     }
+                }
+            },
+            datalabels: {
+                color: "#fff",
+                font: {
+                    weight: "bold",
+                    size: 12
+                },
+                formatter: function(value) {
+                    const percentage = ((value / total) * 100).toFixed(1);
+                    return percentage + "%";
                 }
             }
         }
-    });
-}
+    },
+    plugins: [ChartDataLabels]
+});
+    
 
 function getQuarter(dateString) {
     const date = new Date(dateString);
@@ -317,22 +334,23 @@ function renderDepartmentChart(data) {
             }]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false, // lets it fill the div
-            plugins: {
-                legend: { display: false },
-                tooltip: { enabled: true }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        precision: 0
-                    }
-                }
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { display: false },
+        datalabels: {
+            anchor: 'end',
+            align: 'top',
+            formatter: function(value, context) {
+                const total = context.chart._metasets[0].total;
+                const sum = context.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);
+                return ((value / sum) * 100).toFixed(1) + "%";
             }
         }
-    });
+    }
+},
+plugins: [ChartDataLabels]
+        
 }
 
 //Insight Panel (Rule-Based Intelligence)
@@ -388,6 +406,7 @@ document.getElementById("processBtn").addEventListener("click", function () {
 
 document.getElementById("genderFilter").addEventListener("change", applyFilters);
 document.getElementById("branchFilter").addEventListener("change", applyFilters);
+
 
 
 

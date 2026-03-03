@@ -518,34 +518,6 @@ function renderReasonChart(data) {
 });
     }
 
-function calculateQuarterlyAttrition(exitData, headcountData) {
-    if (!headcountData.length) return null;
-
-    const quarterlyExits = calculateQuarterlyTrend(exitData);
-    const quarterlyHeadcount = {};
-
-    headcountData.forEach(row => {
-        const quarter = getQuarter(row["Date"]);
-        if (!quarter) return;
-
-        quarterlyHeadcount[quarter] = parseFloat(row["Headcount"] || 0);
-    });
-
-    console.log("Headcount Data Loaded:", headcountData);
-    
-    const result = {};
-
-    for (let quarter in quarterlyExits) {
-        const exits = quarterlyExits[quarter];
-        const hc = quarterlyHeadcount[quarter];
-
-        if (hc) {
-            result[quarter] = ((exits / hc) * 100).toFixed(1);
-        }
-    }
-
-    return result;
-}
 
 function getQuarter(dateString) {
     const date = new Date(dateString);
@@ -710,16 +682,24 @@ function populateBranchFilter(data) {
 }
 
 document.getElementById("processBtn").addEventListener("click", function () {
+
     const exitFile = document.getElementById("exitFile").files[0];
+    const headcountFile = document.getElementById("headcountFile").files[0];
+
     if (!exitFile) {
         updateStatus("❌ Exit file is required.");
         return;
     }
-    document.getElementById("headcountFile")
-    .addEventListener("change", function () {
-        parseCSV(this.files[0], "headcount");
+
+    // Parse exit file
+    parseCSV(exitFile, "exit");
+
+    // Parse headcount file (if uploaded)
+    if (headcountFile) {
+        parseCSV(headcountFile, "headcount");
+    }
 });
-});
+
 
 function calculateQuarterlyAttrition(exitData, headcountData) {
     if (!headcountData.length) return null;
@@ -764,6 +744,7 @@ function calculateAttritionRate() {
 
     return rate + "%";
 }
+
 
 
 

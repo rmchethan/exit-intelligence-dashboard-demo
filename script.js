@@ -1,5 +1,44 @@
 
 
+function validateColumns(data, requiredColumns) {
+    if (!data.length) return "File is empty.";
+
+    const uploadedColumns = Object.keys(data[0]);
+
+    const missing = requiredColumns.filter(col => 
+        !uploadedColumns.includes(col)
+    );
+
+    if (missing.length) {
+        return "Missing columns: " + missing.join(", ");
+    }
+
+    return null;
+}
+
+const REQUIRED_EXIT_COLUMNS = [
+    "Employee ID",
+    "Join Date",
+    "Exit Date",
+    "Department",
+    "Branch",
+    "Gender",
+    "Voluntary/Involuntary",
+    "Exit Reason Category",
+    "Performance Rating"
+];
+
+const REQUIRED_HEADCOUNT_COLUMNS = [
+    "Employee ID",
+    "Join Date",
+    "Department",
+    "Branch",
+    "Gender",
+    "Status"
+];
+
+
+
 let survivalChart; // make sure this is global at the top of your JS
 
 function calculateSurvivalData(data) {
@@ -108,25 +147,38 @@ function parseCSV(file, type) {
         header: true,
         skipEmptyLines: true,
         complete: function (results) {
+
+            const data = results.data;
+
             if (type === "exit") {
-                exitData = results.data;
+
+                const error = validateColumns(data, REQUIRED_EXIT_COLUMNS);
+                if (error) {
+                    updateStatus("❌ Exit file error: " + error);
+                    return;
+                }
+
+                exitData = data;
                 updateStatus("✅ Exit file loaded. Records: " + exitData.length);
                 processExitData();
+
             } else {
-                headcountData = results.data;
+
+                const error = validateColumns(data, REQUIRED_HEADCOUNT_COLUMNS);
+                if (error) {
+                    updateStatus("❌ Headcount file error: " + error);
+                    return;
+                }
+
+                headcountData = data;
                 updateStatus("✅ Headcount file loaded. Records: " + headcountData.length);
 
-                // Update attrition KPI immediately
                 const attritionRate = calculateAttritionRate();
                 document.getElementById("kpiAttrition").innerText = attritionRate;
             }
-        },
-        error: function (error) {
-            updateStatus("❌ Error parsing file: " + error.message);
         }
     });
 }
-
 
 function calculateAttritionFromEmployeeFile(headcountData) {
     if (!headcountData.length) return "--";
@@ -708,6 +760,7 @@ function calculateAttritionRate() {
 
     return rate + "%";
 }
+
 
 
 

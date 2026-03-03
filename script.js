@@ -216,6 +216,8 @@ function processExitData() {
     attritionRate = calculateAttritionFromEmployeeFile(headcountData);
     }
 
+    console.log("Exit Data Loaded:", exitData);
+
     document.getElementById("kpiAttrition").innerText = attritionRate;
 
     // Update KPI cards
@@ -529,6 +531,8 @@ function calculateQuarterlyAttrition(exitData, headcountData) {
         quarterlyHeadcount[quarter] = parseFloat(row["Headcount"] || 0);
     });
 
+    console.log("Headcount Data Loaded:", headcountData);
+    
     const result = {};
 
     for (let quarter in quarterlyExits) {
@@ -760,6 +764,7 @@ function calculateAttritionRate() {
 
     return rate + "%";
 }
+
 
 
 

@@ -1,0 +1,21 @@
+Employee ID,Gender,Branch,Department,Join Date,Status
+H001,Female,Hamburg,IT,2022-07-25,Exited
+H002,Female,Hamburg,Finance,2021-01-13,Active
+H003,Female,Berlin,IT,2022-10-15,Exited
+H004,Male,Hamburg,Finance,2021-11-03,Exited
+H005,Female,Munich,Finance,2020-02-09,Exited
+H006,Female,Hamburg,IT,2020-04-27,Active
+H007,Male,Berlin,HR,2020-01-09,Active
+H008,Male,Munich,HR,2022-08-02,Active
+H009,Male,Berlin,Sales,2022-01-22,Exited
+H010,Female,Berlin,HR,2020-04-24,Exited
+H011,Female,Berlin,HR,2021-02-25,Active
+H012,Female,Berlin,Operations,2020-09-11,Active
+H013,Male,Munich,IT,2022-10-22,Exited
+H014,Male,Berlin,Operations,2020-12-15,Active
+H015,Male,Munich,Operations,2020-08-16,Exited
+H016,Female,Hamburg,Operations,2021-11-03,Exited
+H017,Female,Hamburg,Sales,2020-08-19,Active
+H018,Male,Hamburg,HR,2020-04-19,Exited
+H019,Female,Berlin,Sales,2022-06-05,Exited
+H020,Female,Hamburg,Sales,2022-05-14,Exited
